@@ -22,11 +22,18 @@
 #include "llvm/Support/raw_ostream.h"
 
 namespace llvm {
+#if LLVM_VERSION_MAJOR >= 24
+class HelloWorldNewPMPass : public RequiredPassInfoMixin<HelloWorldNewPMPass> {
+public:
+    PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
+};
+#else
 class HelloWorldNewPMPass : public PassInfoMixin<HelloWorldNewPMPass> {
 public:
     PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
     static bool isRequired() { return true; }
 };
+#endif
 
 PreservedAnalyses HelloWorldNewPMPass::run(
         Function &F,
